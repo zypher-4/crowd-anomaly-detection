@@ -1,7 +1,7 @@
 # Crowd Behavior Anomaly Detection
 
 Unsupervised Video Behavior Anomaly Mining in Crowd Surveillance  
-**CSE/CST [Your Course Code] — ASU, Spring 2025**
+**CSE 572 — ASU, Spring 2025**
 
 ## Team
 | Name | ASU ID | Role |
@@ -18,13 +18,13 @@ Autoencoder (CAE), and Isolation Forest on handcrafted motion features to detect
 rare behavioral anomalies without manual labeling.
 
 ## Datasets
-- [ShanghaiTech Campus Dataset](https://sviplab.github.io/dataset/campus_dataset.html)
+- [ShanghaiTech Campus Dataset](https://svip-lab.github.io/dataset/campus_dataset.html)
 - [UCSD Pedestrian Dataset](http://www.svcl.ucsd.edu/projects/anomaly/dataset.html)
 
 ## Setup Instructions
 
 ### 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/crowd-anomaly-detection.git
+git clone https://github.com/zypher-4/crowd-anomaly-detection.git
 cd crowd-anomaly-detection
 
 ### 2. Create a virtual environment
@@ -39,6 +39,7 @@ pip install -r requirements.txt
 See `data/README.md` for dataset download instructions.
 
 ## Project Structure
+```
 crowd-anomaly-detection/
 ├── data/
 │   ├── raw/              # Original downloaded datasets
@@ -52,6 +53,7 @@ crowd-anomaly-detection/
 ├── outputs/              # Results and figures
 ├── requirements.txt
 └── README.md
+```
 
 ## Methods
 1. **Optical Flow Extraction** — Farneback method via OpenCV
