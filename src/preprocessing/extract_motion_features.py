@@ -3,7 +3,13 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
+
 def extract_motion_features(flow_dir, output_csv):
+    # RESUME CHECK — skip if CSV already exists
+    if os.path.exists(output_csv):
+        print(f"Already exists, skipping: {output_csv}")
+        return
+
     records = []
 
     for video_name in tqdm(os.listdir(flow_dir), desc=f"Motion features: {flow_dir}"):
@@ -17,8 +23,8 @@ def extract_motion_features(flow_dir, output_csv):
         if not os.path.exists(mag_path):
             continue
 
-        magnitudes = np.load(mag_path)   # (N-1, H, W)
-        directions = np.load(dir_path)   # (N-1, H, W)
+        magnitudes = np.load(mag_path)
+        directions = np.load(dir_path)
 
         for frame_idx in range(len(magnitudes)):
             mag = magnitudes[frame_idx]

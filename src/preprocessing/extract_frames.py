@@ -2,16 +2,23 @@ import cv2
 import os
 from tqdm import tqdm
 
+
 def extract_frames(video_dir, output_dir, resize=(256, 256)):
     os.makedirs(output_dir, exist_ok=True)
     video_files = [f for f in os.listdir(video_dir) if f.endswith(('.avi', '.mp4'))]
 
+    skipped = 0
     for video_file in tqdm(video_files, desc="Extracting frames"):
-        video_path = os.path.join(video_dir, video_file)
         video_name = os.path.splitext(video_file)[0]
         frame_output_dir = os.path.join(output_dir, video_name)
-        os.makedirs(frame_output_dir, exist_ok=True)
 
+        # RESUME CHECK — skip if folder exists and has frames in it
+        if os.path.exists(frame_output_dir) and len(os.listdir(frame_output_dir)) > 0:
+            skipped += 1
+            continue
+
+        os.makedirs(frame_output_dir, exist_ok=True)
+        video_path = os.path.join(video_dir, video_file)
         cap = cv2.VideoCapture(video_path)
         frame_idx = 0
 
@@ -27,6 +34,7 @@ def extract_frames(video_dir, output_dir, resize=(256, 256)):
         cap.release()
 
     print(f"Done. Frames saved to {output_dir}")
+    print(f"Skipped {skipped} already processed videos")
 
 
 if __name__ == "__main__":

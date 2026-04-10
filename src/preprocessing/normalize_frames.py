@@ -28,9 +28,16 @@ def normalize_frames(input_dir, output_dir, resize=(256, 256)):
         if os.path.isdir(os.path.join(input_dir, f)) and not is_gt_folder(f)
     ]
 
+    skipped = 0
     for video_name in tqdm(video_folders, desc=f"Normalizing: {input_dir}"):
-        video_frame_dir = os.path.join(input_dir, video_name)
+        save_path = os.path.join(output_dir, f"{video_name}.npy")
 
+        # RESUME CHECK — skip if .npy already exists
+        if os.path.exists(save_path):
+            skipped += 1
+            continue
+
+        video_frame_dir = os.path.join(input_dir, video_name)
         frame_files = sorted(
             [f for f in os.listdir(video_frame_dir) if is_frame_file(f)],
             key=numerical_sort_key
@@ -47,26 +54,23 @@ def normalize_frames(input_dir, output_dir, resize=(256, 256)):
             frame = frame.astype(np.float32) / 255.0
             frames.append(frame)
 
-        frames_array = np.array(frames)  # shape: (N, H, W)
-        save_path = os.path.join(output_dir, f"{video_name}.npy")
+        frames_array = np.array(frames)
         np.save(save_path, frames_array)
 
     print(f"Done. Normalized frames saved to {output_dir}")
+    print(f"Skipped {skipped} already processed videos")
 
 
 if __name__ == "__main__":
     jobs = [
-        # ShanghaiTech training — from your extracted frames
         (
             "data/processed/frames/shanghaitech/training",
             "data/processed/normalized/shanghaitech/training"
         ),
-        # ShanghaiTech testing
         (
             "data/raw/shanghaitech/testing/frames",
             "data/processed/normalized/shanghaitech/testing"
         ),
-        # UCSD
         ("data/raw/ucsd/UCSDped1/Train", "data/processed/normalized/ucsd/ped1/training"),
         ("data/raw/ucsd/UCSDped1/Test",  "data/processed/normalized/ucsd/ped1/testing"),
         ("data/raw/ucsd/UCSDped2/Train", "data/processed/normalized/ucsd/ped2/training"),
