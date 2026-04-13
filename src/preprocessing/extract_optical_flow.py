@@ -36,14 +36,11 @@ def extract_optical_flow(frames_dir, output_dir, resize=(256, 256)):
     for video_name in tqdm(video_folders, desc=f"Optical flow: {frames_dir}"):
         video_out_dir = os.path.join(output_dir, video_name)
 
-        # RESUME CHECK — skip if all 3 output files already exist
-        flow_uv_path = os.path.join(video_out_dir, "flow_uv.npy")
+        # RESUME CHECK — only magnitude and direction now
         flow_mag_path = os.path.join(video_out_dir, "flow_magnitude.npy")
         flow_dir_path = os.path.join(video_out_dir, "flow_direction.npy")
 
-        if os.path.exists(flow_uv_path) and \
-           os.path.exists(flow_mag_path) and \
-           os.path.exists(flow_dir_path):
+        if os.path.exists(flow_mag_path) and os.path.exists(flow_dir_path):
             skipped += 1
             continue
 
@@ -61,7 +58,6 @@ def extract_optical_flow(frames_dir, output_dir, resize=(256, 256)):
 
         flow_magnitudes = []
         flow_directions = []
-        flow_uv_list = []
 
         first_path = os.path.join(video_frame_dir, frame_files[0])
         prev_frame = cv2.imread(first_path)
@@ -89,12 +85,10 @@ def extract_optical_flow(frames_dir, output_dir, resize=(256, 256)):
             magnitude, angle = cv2.cartToPolar(flow[..., 0], flow[..., 1])
             flow_magnitudes.append(magnitude)
             flow_directions.append(angle)
-            flow_uv_list.append(flow)
             prev_gray = curr_gray
 
         np.save(flow_mag_path, np.array(flow_magnitudes))
         np.save(flow_dir_path, np.array(flow_directions))
-        np.save(flow_uv_path, np.array(flow_uv_list))
 
     print(f"Done. Optical flow saved to {output_dir}")
     print(f"Skipped {skipped} already processed videos")
