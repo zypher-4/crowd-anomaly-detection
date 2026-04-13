@@ -9,13 +9,14 @@ The `data/raw/` folder is in `.gitignore`.
 2. Download the full dataset (training + testing splits)
 3. Extract to: `data/raw/shanghaitech/`
 
-Expected structure:
+```Expected structure:
 data/raw/shanghaitech/
 ├── training/
 │   └── videos/   (437 videos)
 └── testing/
     ├── videos/   (172 videos)
     └── test_frame_mask/
+```
 
 ## UCSD Pedestrian Dataset
 1. Visit: http://www.svcl.ucsd.edu/projects/anomaly/dataset.html
